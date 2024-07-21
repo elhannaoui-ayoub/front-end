@@ -1,0 +1,103 @@
+<div class="container-xl">
+  <h1 class="app-page-title">New Reservation</h1>
+  <hr class="mb-4">
+  <div class="row g-4 settings-section">
+    <!--<div class="col-12 col-md-4">
+      <h3 class="section-title">General</h3>
+      <div class="section-intro">Settings section intro goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. <a href="help.html">Learn more</a></div>
+    </div>-->
+    <div class="col-12 col-md-6">
+      <div class="app-card app-card-settings shadow-sm p-4">
+
+        <div class="app-card-body">
+          <form  class="settings-form" [formGroup]="newReservationFormGroup" (ngSubmit)="handleSaveReservation()" >
+
+
+
+
+
+            <div class="mb-3" *ngIf="keycloakService.getUserRoles().includes('ADMIN')">
+              <label for="clients" class="form-label">Clients</label>
+              <select class="form-select" formControlName="client" id="clients" aria-label="select example">
+
+                <option *ngFor="let client of clients" value="{{client.id}}">{{client.username}}</option>
+
+              </select>
+            </div>
+
+
+            <div class="mb-3">
+              <label for="pickupDate" class="form-label">Pick up date</label>
+              <input type="date" formControlName="pickupDate" class="form-control" id="pickupDate" >
+            </div>
+
+
+
+
+
+
+
+            <button [disabled]="!newReservationFormGroup.valid" type="submit" class="btn app-btn-primary">Validate</button>
+          </form>
+
+
+
+        </div><!--//app-card-body-->
+
+      </div><!--//app-card-->
+    </div>
+
+
+
+
+
+    <div class="col-12 col-md-6" *ngIf="books.length>0">
+      <div class="app-card app-card-settings shadow-sm p-4">
+        <div class="mb-3" >
+
+         <table class="table">
+           <thead>
+           <tr>
+             <th>Image</th>
+             <th>intitule</th>
+             <th>prix</th>
+             <th>Action</th>
+           </tr>
+           </thead>
+           <tbody>
+           <tr *ngFor="let book of books" >
+             <td>
+               <img class="profile-image" width="20" src="http://localhost:8082/images/{{book.image}}" alt="">
+
+             </td>
+             <td>{{book.intitule}}</td>
+             <td>{{book.borrowPrice}}</td>
+             <td>
+               <button type="button" (click)="removeBookFromCart(book)"  class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+
+             </td>
+           </tr>
+
+           </tbody>
+         </table>
+        </div>
+        <div class="app-card-body">
+
+
+
+        </div><!--//app-card-body-->
+
+      </div><!--//app-card-->
+    </div>
+
+
+
+
+
+
+
+
+  </div><!--//row-->
+  <hr class="my-4">
+
+</div>

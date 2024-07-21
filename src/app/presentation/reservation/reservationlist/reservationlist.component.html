@@ -1,0 +1,88 @@
+
+
+
+
+
+<div class="row g-3 mb-4 align-items-center justify-content-between">
+  <div class="col-auto">
+    <h1 class="app-page-title mb-0">Reservations</h1>
+  </div>
+  <div class="col-auto">
+    <div class="page-utilities">
+      <div class="row g-2 justify-content-start justify-content-md-end align-items-center">
+
+        <div class="col-auto">
+
+          <!-- <div class="col-auto">
+             <input (input)="onInput($event)" type="text" id="search-orders" name="searchorders" class="form-control search-orders" placeholder="Search">
+           </div>-->
+
+
+
+        </div><!--//col-->
+        <div class="col-auto">
+
+          <select (change)="onInput2($event)" class="form-select w-auto">
+            <option selected="" value="option-1">All</option>
+            <option value="Waiting">Waiting</option>
+            <option value="Proccesed">Proccesed</option>
+            <option value="Expired">Expired</option>
+            <option value="Closed">Closed</option>
+            <option value="Canceled">Canceled</option>
+          </select>
+        </div>
+
+      </div><!--//row-->
+    </div><!--//table-utilities-->
+  </div><!--//col-auto-->
+</div><!--//row-->
+
+<div class="tab-content" id="orders-table-tab-content">
+  <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
+    <div class="app-card app-card-orders-table shadow-sm mb-5">
+      <div class="app-card-body">
+        <div class="table-responsive">
+          <table class="table app-table-hover mb-0 text-left">
+            <thead>
+            <tr>
+              <th class="cell">ID</th>
+              <th class="cell">User</th>
+              <th class="cell">Starting date</th>
+              <th class="cell">Ending Date</th>
+              <th class="cell">Status</th>
+              <th class="cell">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let reservation of reservationsFiltered">
+              <td class="cell">{{reservation.id}}</td>
+              <td class="cell">{{reservation.user_id}}</td>
+              <td class="cell">{{reservation.dateDebut}}</td>
+              <td class="cell">{{reservation.dateFin}}</td>
+              <td class="cell">{{reservation.reservationStatus}}</td>
+              <td>
+                <button type="button" (click)="routerAffect(reservation)" class="btn btn-outline-primary">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <nav class="app-pagination">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" tabindex="-1" aria-disabled="true" (click)="previousPage()">Previous</a>
+        </li>
+        <li class="page-item" *ngFor="let page of paginationElements" [class.active]="page === currentPage">
+          <a class="page-link" (click)="changePage(page)">{{ page }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="nextPage()">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

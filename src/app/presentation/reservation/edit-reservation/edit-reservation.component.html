@@ -1,0 +1,215 @@
+<div class="container-xl">
+
+  <h1 class="app-page-title"> </h1>
+  <div style="width:100%;display:flex;justify-content:space-between">
+    <p><span style="color:black;font-size:22px;font-weight:500" >Edit Reservation #{{reservation.id}}</span></p>
+    <button class="btn btn-outline-primary" (click)="handleSaveReservation()" >Save</button>
+  </div>
+
+
+  <hr class="mb-4">
+  <form   [formGroup]="editReservationFormGroup"  >
+  <div class="row g-4 settings-section">
+    <!--<div class="col-12 col-md-4">
+      <h3 class="section-title">General</h3>
+      <div class="section-intro">Settings section intro goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. <a href="help.html">Learn more</a></div>
+    </div>-->
+
+
+
+
+    <div class="col-12 col-md-6">
+      <div class="app-card app-card-settings shadow-sm p-4">
+
+        <div class="app-card-body">
+          <p>
+            Status ({{this.reservation.reservationStatus}})
+          </p>
+          <div class="mb-3">
+
+            <select class="form-select" formControlName="reservationStatus"  id="reservationStatus" aria-label="select example">
+
+              <option *ngIf="keycloakService.getUserRoles().includes('ADMIN')" value="Closed">Closed</option>
+
+              <option *ngIf="keycloakService.getUserRoles().includes('ADMIN')" value="Expired">Expired</option>
+              <option *ngIf="keycloakService.getUserRoles().includes('ADMIN')" value="Waiting">Waiting</option>
+              <option  *ngIf="keycloakService.getUserRoles().includes('ADMIN')" value="Processed">Processed</option>
+
+              <option  value="Canceled">Canceled</option>
+            </select>
+          </div>
+
+
+        </div><!--//app-card-body-->
+
+      </div><!--//app-card-->
+    </div>
+    <div class="col-12 col-md-3">
+      <div class="app-card app-card-settings shadow-sm p-4">
+
+        <div class="app-card-body">
+          <p>
+            Starting date
+          </p>
+          <div class="mb-3">
+
+            <input type="date" formControlName="dateDebut" class="form-control" id="pickupDate" >
+          </div>
+
+
+
+
+        </div><!--//app-card-body-->
+
+      </div><!--//app-card-->
+    </div>
+
+    <div class="col-12 col-md-3">
+      <div class="app-card app-card-settings shadow-sm p-4">
+
+        <div class="app-card-body">
+          <p>
+            Ending date
+          </p>
+          <p>
+            {{reservation.dateFin}}
+          </p>
+
+
+
+
+
+        </div><!--//app-card-body-->
+
+      </div><!--//app-card-->
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+  </div><!--//row-->
+  </form>
+
+  <div class="row g-4 settings-section mt-1">
+
+
+    <div class="col-12 col-md-6" *ngIf="reserationLines.length>0">
+      <div class="app-card app-card-settings shadow-sm p-4">
+        <div class="mb-3">
+          <label  class="form-label">Reservation lines</label>
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Id</th>
+              <th>Book</th>
+              <th>Title</th>
+              <th>Date debut</th>
+              <th>Date fin</th>
+              <th>Date Return</th>
+              <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let rl of reserationLines; index as i" >
+
+              <td>{{rl.id}}</td>
+              <td>
+                <img class="profile-image" width="20" src="http://localhost:8082/images/{{rl.book.image}}" alt="">
+
+              </td>
+              <td><a style="cursor:pointer" (click)="goToBook(rl.book)" >{{rl.book.intitule | slice:0:3}}</a></td>
+              <td>{{rl.dateDebut}}</td>
+              <td   >{{rl.dateFin}}</td>
+              <td>{{rl.dateReturn}}</td>
+              <td >
+                <button type="button"  (click)="showForm(i)"  class="btn btn-outline-primary">
+                  <i *ngIf="keycloakService.getUserRoles().includes('ADMIN')" class="fa-solid fa-pen-to-square"></i>
+                  <i *ngIf="!keycloakService.getUserRoles().includes('ADMIN')" class="fa-solid fa-eye"></i>
+                </button>
+
+              </td>
+
+            </tr>
+
+            </tbody>
+          </table>
+        </div>
+        <div class="app-card-body">
+
+
+
+        </div><!--//app-card-body-->
+
+      </div><!--//app-card-->
+    </div>
+
+
+    <div class="col-12 col-md-6" *ngIf="form==1">
+      <div class="app-card app-card-settings shadow-sm p-4">
+        <label class="form-label">ReservationLine #{{reserationLines[currentIndex].id}}</label>
+        <div class="app-card-body">
+
+          <div class="mb-3" *ngIf="keycloakService.getUserRoles().includes('ADMIN')">
+            <label for="dateReturn" class="form-label">Return date</label>
+            <input type="date"   [(ngModel)]="reserationLines[currentIndex].dateReturn" class="form-control" id="dateReturn" >
+          </div>
+
+          <div class="mb-3" *ngIf="keycloakService.getUserRoles().includes('ADMIN')">
+            <label  class="form-label">Apply a Penalty</label>
+            <select [(ngModel)]="reserationLines[currentIndex].penalty" class="form-select w-auto">
+              <option selected="" value="">NO PENALTY</option>
+              <option value="DELAY">DELAY(10DH/jour)</option>
+              <option value="DAMAGE">DAMAGE(50DH)</option>
+              <option value="LOSE">LOSE(50DH)</option>
+            </select>
+          </div>
+
+          <div class="mb-3" >
+            <table class="table">
+              <thead>
+              <tr>
+                <th>Id</th>
+                <th>montant</th>
+
+                <th>penaltyType</th>
+                <th>penaltyStatus</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let penalty of penalties; index as i" >
+
+                <td>{{penalty.id}}</td>
+                <td>{{penalty.montant}}</td>
+
+                <td   >{{penalty.penaltyType}}</td>
+                <td>{{penalty.penaltyStatus}}</td>
+                <td>
+                  <button type="button" *ngIf="keycloakService.getUserRoles().includes('ADMIN')" (click)="routerAffect(penalty)"   class="btn btn-outline-primary"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button type="button" *ngIf="keycloakService.getUserRoles().includes('ADMIN')" (click)="dropPenalty(penalty)"  class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+
+                </td>
+
+              </tr>
+
+              </tbody>
+            </table>
+          </div>
+
+
+
+        </div><!--//app-card-body-->
+
+      </div><!--//app-card-->
+    </div>
+  </div>
+  <hr class="my-4">
+
+</div>
